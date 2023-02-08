@@ -8,13 +8,17 @@ h1 {
 }
 
 .navi {
+  display: flex;
   border:green 5px solid;
   background-color: black;
   margin-bottom: 10px;
+  justify-content: space-around;
+  min-width: 750px;
 }
 
 .item{
   padding-right: 50px;
+  padding-left: 50px;
 }
 
 .container {
@@ -29,6 +33,7 @@ h1 {
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: space-around;
+  min-width: 750px;
   
 }
 
