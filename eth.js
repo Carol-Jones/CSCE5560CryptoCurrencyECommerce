@@ -1,5 +1,10 @@
 
+
 const ethButton = document.querySelector('connect-button');
+ ethButton.addEventListener('click', () => {
+   alert('Install MetaMask');
+  });
+/*
 if(typeof window.ethereum !== 'undefined') {
   ethButton.addEventListener('click', () => {
     ethereum.request({ method: 'eth_requestAccounts' });
@@ -9,3 +14,4 @@ if(typeof window.ethereum !== 'undefined') {
 else {
   console.log('Install MetaMask!');
 }
+*/
