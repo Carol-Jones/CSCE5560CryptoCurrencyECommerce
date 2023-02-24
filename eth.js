@@ -1,4 +1,4 @@
-
+const ethereumButton = document.querySelector('.enableEthereumButton');
 
 if(typeof window.ethereum !== 'undefined') {
   ethButton.addEventListener('click', () => {
