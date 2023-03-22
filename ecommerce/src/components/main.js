@@ -1,5 +1,7 @@
 import {React,useState} from 'react';
 import { ethers } from "ethers";
+import {getDatabase, set, ref, update} from "firebase/database";
+import {database} from "../firebase";
 
 function Main()
 {
@@ -36,7 +38,30 @@ const connectWalletHandler = () =>
 //Set Account 
 const accountChangedHandler = (newAccount) => {
     setDefaultAccount(newAccount.toString());
+    
+    //add user etherium address to database users table
+    try{
+      update(ref(database, 'users/'), {
+          
+          ethAddress: newAccount.toString()
+  
+         })
+          .then(() => {
+              // Data saved successfully!
+              alert('Etherium Address Saved Successfully');
+  
+          })
+          .catch((error) => {
+              // The write failed...
+              alert(error);
+          });
+  }
+  catch{
+
+  }
     accountBalanceHandler(newAccount)
+
+    //add to database as user
 }
 
 //Get account Balance
