@@ -1,23 +1,16 @@
-import './styles/App.css';
-import React from 'react';
-import { BrowserRouter, Routes, Route, HashRouter} from 'react-router-dom';
+import "./styles/style.css";
+import React from "react";
+import { BrowserRouter, Routes, Route, HashRouter } from "react-router-dom";
 
-import Main from './components/main'
-
+import Main from "./components/main";
 function App() {
   return (
-    
-    
-      <BrowserRouter>
-
-     
+    <BrowserRouter>
       <Routes>
-          <Route exact path="/Home" element ={<Main />}/>
- 
+        <Route exact path="/" element={<Main />} />
       </Routes>
-      </BrowserRouter>
-  
-  )
+    </BrowserRouter>
+  );
 }
 
 export default App;
