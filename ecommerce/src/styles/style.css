@@ -4,19 +4,25 @@ body {
 
 h1 {
   text-align: center;
-  margin: auto;
+  font-size: 2em;
+}
+
+nav {
+  position: absolute;
+  top: 25px;
+  right: 0px;
 }
 
 .navi {
   display: flex;
-  border:green 5px solid;
+  border: green 5px solid;
   background-color: black;
   margin-bottom: 10px;
   justify-content: space-around;
   min-width: 750px;
 }
 
-.item{
+.item {
   padding-right: 50px;
   padding-left: 50px;
 }
@@ -34,7 +40,6 @@ h1 {
   flex-direction: row;
   justify-content: space-around;
   min-width: 750px;
-  
 }
 
 .containerproduct {
@@ -65,4 +70,12 @@ h1 {
   display: flex;
   color: black;
   justify-content: center;
+}
+
+.addtoCart {
+  display: flex;
+  justify-content: space-evenly;
+}
+.addtoCart input[type="number"] {
+  width: 25px;
 }

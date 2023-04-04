@@ -54,6 +54,7 @@ function Main() {
     accountBalanceHandler(newAccount);
 
     //add to database as user
+    console.log(getDatabase);
   };
 
   //Get account Balance
@@ -82,7 +83,7 @@ function Main() {
 
     //Set transaction parameters
     const transactionParameters = {
-      to: "0x4C61d72a5beF79b34B479f30AF356dE28594Db58", //Address that gets funds
+      to: "0x9c89dB7875B0d7F8BF2f981a153925B62d4f024E", //Address that gets funds
       from: defaultAccount, //Address that pays
       value: Number(grandTotal * 1e18).toString(16), //Value (converted to wei)
     };
@@ -98,6 +99,7 @@ function Main() {
         //Transaction is returned as a hash value
         console.log(txHash);
         console.log("Thank you for your purchase!");
+        accountBalanceHandler(defaultAccount);
       })
       .catch((error) => {
         console.log(error.message);
@@ -120,9 +122,18 @@ function Main() {
 
   return (
     <div>
-      <h1>This is main.js</h1>
+      {/* <h1>This is main.js</h1> */}
+
+      <nav>
+        <button onClick={connectWalletHandler}>Enable Ethereum</button>
+        <img
+          className="shoppingCart"
+          src="images/shopping-cart.svg"
+          alt="Shopping Cart Button"
+          onClick={viewCartHandler}
+        ></img>
+      </nav>
       <h1>Welcome to TempCity</h1>
-      <button onClick={connectWalletHandler}>Enable Ethereum</button>
       <button onClick={checkOutHandler}>Check Out</button>
       <button
         onClick={() => {
@@ -134,7 +145,6 @@ function Main() {
       >
         Add Random item to cart
       </button>
-      <button onClick={viewCartHandler}>seeCart</button>
       <p id="eth-account"></p>
       <div className="accountDisplay">
         <h3>Address: {defaultAccount}</h3>
@@ -157,6 +167,21 @@ function Main() {
             <p>
               <span className="productPrice">15 Eth</span>
             </p>
+            <form className="addtoCart">
+              <label for="quantity">Quantity: </label>
+              <input
+                type="number"
+                id="quantity"
+                name="quantity"
+                min="1"
+              ></input>
+              <input
+                type="button"
+                id="add"
+                name="add"
+                value="Add To Cart"
+              ></input>
+            </form>
           </div>
           <div className="containerproduct">
             <img className="product" src="images/IMG_0099.WEBP" alt=""></img>
