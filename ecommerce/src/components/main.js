@@ -2,6 +2,8 @@ import { React, useState } from "react";
 import { ethers } from "ethers";
 import { getDatabase, set, ref, update } from "firebase/database";
 import { database } from "../firebase";
+
+import Item from "../Item";
 function Main() {
   //Error Message
   const [errorMessage, setErrorMessage] = useState(null);
@@ -16,7 +18,36 @@ function Main() {
   const [userBalance, setUserBalance] = useState(null);
 
   //Set shopping cart array
-  const [shoppingCart, setShoppingCart] = useState([]);
+  const [shoppingCart, setShoppingCart] = useState(new Map());
+
+  //Array of the items to sell
+  const items = [];
+
+  const names = [
+    "Witchy Black Cat",
+    "Feline Intrigue",
+    "Clifftop Majesty",
+    "Castle Dreams",
+    "Double the Fun",
+    "Sunshine Yarn Delight",
+    "Boxed In and Loving It",
+    "Cosmic Curiosity",
+    "Wild West Whiskers",
+    "Lunar Companions",
+    "Kittyzilla",
+    "Fireside Feline",
+    "Sun-Kissed Snoozer",
+    "Mysterious Illumination",
+  ];
+
+  //Create Items
+  for (let i = 1; i <= 14; i++) {
+    const itemName = names[i - 1];
+    const itemImgPath = `images/productImages/IMG_${i}.WEBP`;
+    const itemPrice = i + 2;
+    const item = new Item(i, itemName, itemPrice, itemImgPath);
+    items.push(item);
+  }
 
   //Check that Metamask is installed
   const connectWalletHandler = () => {
@@ -68,16 +99,17 @@ function Main() {
   };
 
   const checkOutHandler = () => {
-    if (!defaultAccount) {
-      alert("Please sign in first");
-      return;
-    }
+    // if (!defaultAccount) {
+    //   alert("Please sign in first");
+    //   return;
+    // }
     console.log("Checking out");
     //Get grandtotal
-    let grandTotal = shoppingCart.reduce(
-      (accum, { price }) => accum + price,
-      0
-    );
+    let grandTotal = 0;
+    shoppingCart.forEach((quantity, item) => {
+      grandTotal += items[item - 1].price * quantity;
+    });
+    console.log(grandTotal);
     //Total in hex
     console.log(grandTotal.toString(16));
 
@@ -106,45 +138,43 @@ function Main() {
       });
   };
 
-  const addToCart = (item) => {
-    console.log(`Adding ${item.name} to Cart`);
-
-    //Create new array and set it as shoppingCart.
-    setShoppingCart([...shoppingCart, item]);
+  const addToCart = (item, quantity) => {
+    console.log(`Adding ${quantity} ${item.name} to Cart`);
+    console.log(item);
+    setShoppingCart(
+      (curCart) =>
+        new Map([
+          ...curCart,
+          [item.id, Number(curCart.get(item.id) || 0) + Number(quantity)],
+        ])
+    );
+    console.log(shoppingCart);
   };
 
   //Change to add html
   const viewCartHandler = () => {
-    shoppingCart.forEach((item) => {
-      console.log(`${item.name} : ${item.price}`);
+    shoppingCart.forEach((quantity, item) => {
+      console.log(`${item} : ${quantity}`);
+      console.log(items[item - 1].price);
     });
   };
 
   return (
     <div>
-      {/* <h1>This is main.js</h1> */}
-
       <nav>
-        <button onClick={connectWalletHandler}>Enable Ethereum</button>
-        <img
-          className="shoppingCart"
-          src="images/shopping-cart.svg"
-          alt="Shopping Cart Button"
-          onClick={viewCartHandler}
-        ></img>
+        <h1>Welcome to TempCity</h1>
+        <div className="navButtons">
+          <button onClick={connectWalletHandler}>Enable Ethereum</button>
+          <img
+            className="shoppingCart"
+            src="images/shopping-cart.svg"
+            alt="Shopping Cart Button"
+            onClick={viewCartHandler}
+          ></img>
+        </div>
       </nav>
-      <h1>Welcome to TempCity</h1>
+
       <button onClick={checkOutHandler}>Check Out</button>
-      <button
-        onClick={() => {
-          addToCart({
-            name: (Math.random() + 1).toString(36).substring(7),
-            price: Math.floor(Math.random() * 15 + 1),
-          });
-        }}
-      >
-        Add Random item to cart
-      </button>
       <p id="eth-account"></p>
       <div className="accountDisplay">
         <h3>Address: {defaultAccount}</h3>
@@ -159,147 +189,42 @@ function Main() {
       </div>
       <main>
         <div className="containermain">
-          <div className="containerproduct">
-            <img className="product" src="images/IMG_0098.WEBP" alt=""></img>
-            <p>
-              <span className="productID">Test</span>
-            </p>
-            <p>
-              <span className="productPrice">15 Eth</span>
-            </p>
-            <form className="addtoCart">
-              <label for="quantity">Quantity: </label>
-              <input
-                type="number"
-                id="quantity"
-                name="quantity"
-                min="1"
-              ></input>
-              <input
-                type="button"
-                id="add"
-                name="add"
-                value="Add To Cart"
-              ></input>
-            </form>
-          </div>
-          <div className="containerproduct">
-            <img className="product" src="images/IMG_0099.WEBP" alt=""></img>
-            <p>
-              <span className="productID">Test</span>
-            </p>
-            <p>
-              <span className="productPrice">15 Eth</span>
-            </p>
-          </div>
-          <div className="containerproduct">
-            <img className="product" src="images/IMG_0100.WEBP" alt=""></img>
-            <p>
-              <span className="productID">Test</span>
-            </p>
-            <p>
-              <span className="productPrice">15 Eth</span>
-            </p>
-          </div>
-          <div className="containerproduct">
-            <img className="product" src="images/IMG_0101.WEBP" alt=""></img>
-            <p>
-              <span className="productID">Test</span>
-            </p>
-            <p>
-              <span className="productPrice">15 Eth</span>
-            </p>
-          </div>
-          <div className="containerproduct">
-            <img className="product" src="images/IMG_0102.WEBP" alt=""></img>
-            <p>
-              <span className="productID">Test</span>
-            </p>
-            <p>
-              <span className="productPrice">15 Eth</span>
-            </p>
-          </div>
-          <div className="containerproduct">
-            <img className="product" src="images/IMG_0103.WEBP" alt=""></img>
-            <p>
-              <span className="productID">Test</span>
-            </p>
-            <p>
-              <span className="productPrice">15 Eth</span>
-            </p>
-          </div>
-          <div className="containerproduct">
-            <img className="product" src="images/IMG_0104.WEBP" alt=""></img>
-            <p>
-              <span className="productID">Test</span>
-            </p>
-            <p>
-              <span className="productPrice">15 Eth</span>
-            </p>
-          </div>
-          <div className="containerproduct">
-            <img className="product" src="images/IMG_0105.WEBP" alt=""></img>
-            <p>
-              <span className="productID">Test</span>
-            </p>
-            <p>
-              <span className="productPrice">15 Eth</span>
-            </p>
-          </div>
-          <div className="containerproduct">
-            <img className="product" src="images/IMG_0106.WEBP" alt=""></img>
-            <p>
-              <span className="productID">Test</span>
-            </p>
-            <p>
-              <span className="productPrice">15 Eth</span>
-            </p>
-          </div>
-          <div className="containerproduct">
-            <img className="product" src="images/IMG_0107.WEBP" alt=""></img>
-            <p>
-              <span className="productID">Test</span>
-            </p>
-            <p>
-              <span className="productPrice">15 Eth</span>
-            </p>
-          </div>
-          <div className="containerproduct">
-            <img className="product" src="images/IMG_0108.WEBP" alt=""></img>
-            <p>
-              <span className="productID">Test</span>
-            </p>
-            <p>
-              <span className="productPrice">15 Eth</span>
-            </p>
-          </div>
-          <div className="containerproduct">
-            <img className="product" src="images/IMG_0109.WEBP" alt=""></img>
-            <p>
-              <span className="productID">Test</span>
-            </p>
-            <p>
-              <span className="productPrice">15 Eth</span>
-            </p>
-          </div>
-          <div className="containerproduct">
-            <img className="product" src="images/IMG_0110.WEBP" alt=""></img>
-            <p>
-              <span className="productID">Test</span>
-            </p>
-            <p>
-              <span className="productPrice">15 Eth</span>
-            </p>
-          </div>
-          <div className="containerproduct">
-            <img className="product" src="images/IMG_0111.WEBP" alt=""></img>
-            <p>
-              <span className="productID">Test</span>
-            </p>
-            <p>
-              <span className="productPrice">15 Eth</span>
-            </p>
-          </div>
+          {items.map((item, number) => (
+            <div className="containerproduct" key={number}>
+              <img className="product" src={item.image} alt=""></img>
+              <p>
+                <span className="productID">{item.name}</span>
+              </p>
+              <p>
+                <span className="productPrice">{item.price} ETH</span>
+              </p>
+              <form
+                className="addtoCart"
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  addToCart(item, event.target.quantity.value);
+                }}
+              >
+                <div>
+                  <label htmlFor="quantity">Quantity: </label>
+                  <input
+                    type="number"
+                    id="quantity"
+                    name="quantity"
+                    min="1"
+                    max="5"
+                    defaultValue={1}
+                  ></input>
+                </div>
+                <input
+                  type="submit"
+                  id="add"
+                  name="add"
+                  value="Add To Cart"
+                ></input>
+              </form>
+            </div>
+          ))}
         </div>
       </main>
       <footer>
