@@ -1,10 +1,17 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+
+* {
+  font-family: "Montserrat", sans-serif;
+}
+
 body {
   background-color: #dbd1db;
 }
 
 h1 {
   text-align: center;
-  font-size: 2em;
+  font-size: 4rem;
+  margin-bottom: 0px;
 }
 
 nav {
@@ -69,7 +76,9 @@ nav {
 
 .productPrice {
   display: flex;
-  color: black;
+  color: red;
+  font-weight: bold;
+  font-size: 1.5rem;
   justify-content: center;
 }
 
@@ -95,6 +104,14 @@ nav {
   cursor: pointer;
 }
 
+.addtoCart input[type="submit"]:hover {
+  background-image: linear-gradient(blue, darkblue);
+}
+
+.addtoCart input[type="submit"]:active {
+  background-image: linear-gradient(darkblue, blue);
+}
+
 .navButtons {
   display: flex;
   justify-content: center;
@@ -104,4 +121,22 @@ nav {
 }
 .navButtons > * {
   margin: 0 15px;
+}
+
+
+.shoppingCartPopup {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width:25%;
+  background-color: red;
+  border-radius: 5px;
+}
+
+.shoppingCartPopup li > * {
+  display: inline;
+}
+
+.shoppingCartPopup img {
+  width: 100px;
 }

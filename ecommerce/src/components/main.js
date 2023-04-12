@@ -19,6 +19,8 @@ function Main() {
 
   //Set shopping cart array
   const [shoppingCart, setShoppingCart] = useState(new Map());
+  //If the shopping cart should be shown
+  const [showCart, setShowCart] = useState(false);
 
   //Array of the items to sell
   const items = [];
@@ -47,6 +49,27 @@ function Main() {
     const itemPrice = i + 2;
     const item = new Item(i, itemName, itemPrice, itemImgPath);
     items.push(item);
+  }
+
+  function ShowShoppingCart() {
+    return (
+        <div className="shoppingCartPopup">
+          <ul>
+          {Array.from(shoppingCart).map(([name, quantity]) => (
+            <li key={name}>
+              <img src={items[name-1].image}></img>
+              <p>{items[name-1].name}</p>
+              <p>{items[name-1].price} ETH</p>
+              <p>Quantity: {quantity}</p>
+            </li>
+          ))}
+          </ul>
+        </div>
+    );
+}
+
+  const showShoppingCartHandler = () => {
+    setShowCart(!showCart);
   }
 
   //Check that Metamask is installed
@@ -156,22 +179,28 @@ function Main() {
     shoppingCart.forEach((quantity, item) => {
       console.log(`${item} : ${quantity}`);
       console.log(items[item - 1].price);
+      console.log(items[item - 1].itemName);
     });
+
   };
 
   return (
     <div>
       <nav>
         <h1>Welcome to TempCity</h1>
+        <h2><em>Art for the modern age</em></h2>
         <div className="navButtons">
           <button onClick={connectWalletHandler}>Enable Ethereum</button>
           <img
             className="shoppingCart"
             src="images/shopping-cart.svg"
             alt="Shopping Cart Button"
-            onClick={viewCartHandler}
+            onClick={showShoppingCartHandler}
           ></img>
         </div>
+        {showCart && (<ShowShoppingCart
+          cartItems = {shoppingCart}
+        />)}
       </nav>
 
       <button onClick={checkOutHandler}>Check Out</button>
