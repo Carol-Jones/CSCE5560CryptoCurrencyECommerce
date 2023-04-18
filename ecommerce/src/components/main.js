@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { getDatabase, set, ref, update } from "firebase/database";
 import { database } from "../firebase";
@@ -21,6 +21,8 @@ function Main() {
   const [shoppingCart, setShoppingCart] = useState(new Map());
   //If the shopping cart should be shown
   const [showCart, setShowCart] = useState(false);
+
+  const [totalCost, setTotalCost] = useState(0);
 
   //Array of the items to sell
   const items = [];
@@ -51,26 +53,57 @@ function Main() {
     items.push(item);
   }
 
+  //Creates/updates the shopping cart popup
   function ShowShoppingCart() {
+    var total = 0;
+    const updateQuantity = (event, name) => {
+      addToCart(items[name - 1], event.target.value - shoppingCart.get(name));
+    };
+    const removeItem = (name) => {
+      setShoppingCart((curCart) => {
+        const newCart = new Map(curCart);
+        newCart.delete(name);
+        return newCart;
+      });
+    };
     return (
-        <div className="shoppingCartPopup">
-          <ul>
-          {Array.from(shoppingCart).map(([name, quantity]) => (
-            <li key={name}>
-              <img src={items[name-1].image}></img>
-              <p>{items[name-1].name}</p>
-              <p>{items[name-1].price} ETH</p>
-              <p>Quantity: {quantity}</p>
-            </li>
-          ))}
-          </ul>
-        </div>
+      <div className="shoppingCartPopup">
+        <h3>My Cart</h3>
+        {Array.from(shoppingCart).map(([name, quantity]) => (
+          <div key={name} className="shoppingCartPopupItem">
+            <div className="shoppingCartPopupImage">
+              <p>
+                <strong>{items[name - 1].name}</strong>
+              </p>
+              <img src={items[name - 1].image}></img>
+            </div>
+            <div className="shoppingCartPopupInfo">
+              <p>{items[name - 1].price} ETH</p>
+              <label htmlFor="shoppingCartQuantity">Quantity: </label>
+              <input
+                type="number"
+                id="shoppingCartQuantity"
+                name="shoppingCartQuantity"
+                min="1"
+                max="5"
+                defaultValue={quantity}
+                onChange={(event) => updateQuantity(event, name)}
+              ></input>
+              <button type="button" onClick={() => removeItem(name)}>
+                Remove
+              </button>
+            </div>
+          </div>
+        ))}
+        <h3>Total: {totalCost} ETH</h3>
+        <button onClick={checkOutHandler}>Check Out</button>
+      </div>
     );
-}
+  }
 
   const showShoppingCartHandler = () => {
     setShowCart(!showCart);
-  }
+  };
 
   //Check that Metamask is installed
   const connectWalletHandler = () => {
@@ -161,9 +194,24 @@ function Main() {
       });
   };
 
+  //Update the total whenever the cart is changed
+  useEffect(() => {
+    updateTotal();
+  }, [shoppingCart]);
+
+  //Calculate the new total
+  const updateTotal = () => {
+    let grandTotal = 0;
+    shoppingCart.forEach((quantity, item) => {
+      console.log(item);
+      grandTotal += items[item - 1].price * quantity;
+    });
+    setTotalCost(grandTotal);
+  };
+
+  //Add a specified item and quantity to the cart
   const addToCart = (item, quantity) => {
     console.log(`Adding ${quantity} ${item.name} to Cart`);
-    console.log(item);
     setShoppingCart(
       (curCart) =>
         new Map([
@@ -171,7 +219,6 @@ function Main() {
           [item.id, Number(curCart.get(item.id) || 0) + Number(quantity)],
         ])
     );
-    console.log(shoppingCart);
   };
 
   //Change to add html
@@ -181,14 +228,15 @@ function Main() {
       console.log(items[item - 1].price);
       console.log(items[item - 1].itemName);
     });
-
   };
 
   return (
     <div>
       <nav>
         <h1>Welcome to TempCity</h1>
-        <h2><em>Art for the modern age</em></h2>
+        <h2>
+          <em>Art for the modern age</em>
+        </h2>
         <div className="navButtons">
           <button onClick={connectWalletHandler}>Enable Ethereum</button>
           <img
@@ -198,12 +246,9 @@ function Main() {
             onClick={showShoppingCartHandler}
           ></img>
         </div>
-        {showCart && (<ShowShoppingCart
-          cartItems = {shoppingCart}
-        />)}
+        {showCart && <ShowShoppingCart cartItems={shoppingCart} />}
       </nav>
 
-      <button onClick={checkOutHandler}>Check Out</button>
       <p id="eth-account"></p>
       <div className="accountDisplay">
         <h3>Address: {defaultAccount}</h3>
