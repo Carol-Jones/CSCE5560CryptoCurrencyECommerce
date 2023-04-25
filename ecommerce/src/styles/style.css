@@ -143,3 +143,12 @@ nav {
 .shoppingCartPopupItem img {
   width: 100px;
 }
+
+
+.MuiTextField-root {
+  align:center;
+  background: white;
+  
+
+
+}

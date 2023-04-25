@@ -1,28 +1,37 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, useContext } from "react";
 import { ethers } from "ethers";
 import { getDatabase, set, ref, update } from "firebase/database";
 import { database } from "../firebase";
+import { EthContext } from "../context/EthContext";
+import IconButton from '@mui/material/IconButton'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { Link, useNavigate } from 'react-router-dom'
 
 import Item from "../Item";
+import Login from "./login";
+import Modal from "./modal";
+
+import { Icon } from "@mui/material";
+
 function Main() {
+  const navigate = useNavigate();
   //Error Message
   const [errorMessage, setErrorMessage] = useState(null);
 
   //Sign in button
   const [ethButton, setEthButton] = useState(null);
 
-  //Default Account
-  const [defaultAccount, setDefaultAccount] = useState(null);
-
-  //Set User Balance
-  const [userBalance, setUserBalance] = useState(null);
-
+ 
   //Set shopping cart array
   const [shoppingCart, setShoppingCart] = useState(new Map());
   //If the shopping cart should be shown
   const [showCart, setShowCart] = useState(false);
-
   const [totalCost, setTotalCost] = useState(0);
+
+  //get function and variables from context
+  const {connectWalletHandler, accountChangedHandler, accountBalanceHandler, defaultAccount, userBalance} = useContext(EthContext)
+
+  const [loginOpen, setLoginOpen] = useState(false);
 
   //Array of the items to sell
   const items = [];
@@ -105,54 +114,7 @@ function Main() {
     setShowCart(!showCart);
   };
 
-  //Check that Metamask is installed
-  const connectWalletHandler = () => {
-    if (window.ethereum) {
-      window.ethereum
-        .request({ method: "eth_requestAccounts" })
-        .then((result) => {
-          accountChangedHandler(result[0]);
-        });
-    } else {
-      //If metamask isn't installed - tell the user to install metamask
-      setErrorMessage("Please Install MetaMask!");
-      //showAccount.innerHTML = "Please Install MetaMask!";
-      console.log("Install MetaMask!");
-    }
-  };
-  //Set Account
-  const accountChangedHandler = (newAccount) => {
-    setDefaultAccount(newAccount.toString());
 
-    //add user etherium address to database users table
-    try {
-      update(ref(database, "users/"), {
-        ethAddress: newAccount.toString(),
-      })
-        .then(() => {
-          // Data saved successfully!
-          alert("Etherium Address Saved Successfully");
-        })
-        .catch((error) => {
-          // The write failed...
-          alert(error);
-        });
-    } catch {}
-    accountBalanceHandler(newAccount);
-
-    //add to database as user
-    console.log(getDatabase);
-  };
-
-  //Get account Balance
-  const accountBalanceHandler = (address) => {
-    window.ethereum
-      .request({ method: "eth_getBalance", params: [address, "latest"] })
-      .then((balance) => {
-        //Set User Balance
-        setUserBalance(ethers.formatEther(balance));
-      });
-  };
 
   const checkOutHandler = () => {
     // if (!defaultAccount) {
@@ -230,8 +192,15 @@ function Main() {
     });
   };
 
+ 
+function handleLogin() 
+{
+  setLoginOpen(true);
+}
+
   return (
     <div>
+ 
       <nav>
         <h1>Welcome to TempCity</h1>
         <h2>
@@ -239,12 +208,31 @@ function Main() {
         </h2>
         <div className="navButtons">
           <button onClick={connectWalletHandler}>Enable Ethereum</button>
+          <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                color="inherit"
+                onClick={() => {setLoginOpen(true)}}
+                
+              >
+                <AccountCircleIcon/>
+              </IconButton>
+          <div id="portal">
+          <Modal open={loginOpen} onClose={() => setLoginOpen(false)}><Login /></Modal>
+
+          </div>
+
           <img
             className="shoppingCart"
             src="images/shopping-cart.svg"
             alt="Shopping Cart Button"
             onClick={showShoppingCartHandler}
           ></img>
+        </div>
+        <div>
+      
         </div>
         {showCart && <ShowShoppingCart cartItems={shoppingCart} />}
       </nav>
@@ -304,6 +292,7 @@ function Main() {
       <footer>
         <small>&copy; 2023 CSCE 5650 Group 5</small>
       </footer>
+      
     </div>
   );
 }
