@@ -9,9 +9,11 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import { useAuth } from "../context/AuthContext.js";
 import { useNavigate } from "react-router-dom";
+import { EthContext } from "../context/EthContext";
 
 export default function Login() {
 
+    const {connectWalletHandler, accountChangedHandler, accountBalanceHandler, defaultAccount, userBalance} = useContext(EthContext)
 
     const emailRef = useRef();
     const passwordRef = useRef();
@@ -31,7 +33,8 @@ export default function Login() {
             console.log(passwordRef.current.value)
             await login(emailRef.current.value, passwordRef.current.value);
             
-        navigate('/')       
+        navigate('/')
+        await connectWalletHandler();  
         } catch {
             setError("Failed to create an account");
             

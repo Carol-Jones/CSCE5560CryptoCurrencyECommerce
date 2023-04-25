@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react"
+import React, { useRef, useState, useContext } from "react"
 import { Form } from "react-bootstrap"
 
 import { Link, useNavigate, useHistory } from 'react-router-dom';
@@ -11,8 +11,13 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import {getDatabase, set, ref, update} from "firebase/database";
 import {database} from "../firebase"
 import { useAuth } from "../context/AuthContext"
+import { EthContext } from "../context/EthContext";
+
 
 export default function Signup() {
+  const {connectWalletHandler, accountChangedHandler, accountBalanceHandler, defaultAccount, userBalance} = useContext(EthContext)
+
+
   const emailRef = useRef()
   const passwordRef = useRef()
   const passwordConfirmRef = useRef()
@@ -52,8 +57,8 @@ export default function Signup() {
             // The write failed...
             alert(error);
         });
- 
-    } catch {
+    await connectWalletHandler();  
+    }catch {
       
       
       
