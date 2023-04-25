@@ -1,18 +1,18 @@
-import React, {useRef, useState } from "react";
+import React, {useRef, useState, useContext} from "react";
+import { Form } from "react-bootstrap";
+
+import { StyledTextField } from '../styles/MUIStyle';
+import { IconButton, InputAdornment, Box, Button, TextField } from '@mui/material';
 
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import Form from "react-bootstrap/Form";
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-
-
 
 import { useAuth } from "../context/AuthContext.js";
-import { FormLabel } from "@mui/material";
-import { IconButton, InputAdornment } from "@mui/material"
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+
+
     const emailRef = useRef();
     const passwordRef = useRef();
 
@@ -20,18 +20,24 @@ export default function Login() {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-
+    const navigate = useNavigate();
+    
     async function handleSubmit(e) {
+        e.preventDefault();
         try {
             setError("");
             setLoading(true);
+            console.log(emailRef.current.value)
+            console.log(passwordRef.current.value)
             await login(emailRef.current.value, passwordRef.current.value);
-                    
+            
+        navigate('/')       
         } catch {
             setError("Failed to create an account");
-
+            
         }
         setLoading(false);
+        
     }
 
     async function handleClickShowPassword(e)
@@ -40,41 +46,40 @@ export default function Login() {
     }
 
     return (
-        
+        <Box textAlign='center' sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems:"center",}}>
 
-        <div>
+            <Form onSubmit ={handleSubmit}>
+                <Form.Group className="mb-3" id="email">
+                    <StyledTextField id="outlined-basic" label ="Email" varient="filled" type="email" inputRef={emailRef} required/>
+                </Form.Group>
+                <Form.Group className="mb-3" id="password">      
+                    <StyledTextField  id="outlined-basic" label="Password" variant="filled" required
+                        type={showPassword ? "text" : "password"}
+                        InputProps={{
+                            endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton
+                                sx={{color: 'black'}}
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowPassword}
+                                >
+                                {showPassword ? <Visibility /> : <VisibilityOff />}
+                                </IconButton>
+                            </InputAdornment>
+                            )
+                            
+                            }}
+                            inputRef={passwordRef}
+                            />
+                </Form.Group>
 
-        
-        <Form onSubmit ={handleSubmit}>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-                <TextField id="outlined-basic" label ="Email" varient="filled" required/>
-            </Form.Group>
-            <Form.Group className="mb-3" controlID="formBasicPassword">      
-                <TextField  id="outlined-basic" label="Password" variant="filled" required
-                    type={showPassword ? "text" : "password"}
-                    InputProps={{
-                        endAdornment: (
-                        <InputAdornment position="end">
-                            <IconButton
-                            sx={{color: 'black'}}
-                            aria-label="toggle password visibility"
-                            onClick={handleClickShowPassword}
-                            >
-                            {showPassword ? <Visibility /> : <VisibilityOff />}
-                            </IconButton>
-                        </InputAdornment>
-                        )
-                        
-                        }}
-                        inputRef={passwordRef}
-                        />
-            </Form.Group>
-
-            <Button  disabled={loading} sx={{ width: 400 }} variant="contained" id = "SignIn" type = "submit">
-                Sign In
-            </Button>
-        </Form>
-        </div>
-        
+                <Button  disabled={loading} sx={{ width: 400 }} variant="contained" id = "SignIn" type = "submit">
+                    Sign In
+                </Button>
+            </Form>
+        </Box>
     )
 }

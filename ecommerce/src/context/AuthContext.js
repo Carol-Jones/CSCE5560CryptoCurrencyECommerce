@@ -6,11 +6,15 @@ import {
     signInWithEmailAndPassword,
     signOut,
     updateEmail,
-    updatePassword
+    updatePassword,
+    onAuthStateChanged
 } from "firebase/auth";
 import { ethers } from 'ethers';
 import { getDatabase, set, ref, update } from "firebase/database";
 import { database } from "../firebase";
+
+import { EthContext } from "../context/EthContext";
+
 
 const AuthContext = React.createContext()
 
@@ -23,20 +27,6 @@ export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState()
     const [loading, setLoading] = useState(true)
   
-      //Error Message
-  const [errorMessage, setErrorMessage] = useState(null);
-
-  //Sign in button
-  const [ethButton, setEthButton] = useState(null);
-
-  //Default Account
-  const [defaultAccount, setDefaultAccount] = useState(null);
-
-  //Set User Balance
-  const [userBalance, setUserBalance] = useState(null);
-
-  //Set shopping cart array
-  const [shoppingCart, setShoppingCart] = useState([]);
 
 
     function signup(email, password) {
@@ -64,17 +54,27 @@ export function AuthProvider({ children }) {
     function updateUserPassword(password) {
       return updatePassword(currentUser,password)
     }
-
+/*
     function getCurrentUser()
     {
-       let user = auth.currentUser
-       return user
+      const currentUser = auth.onAuthStateChanged(user => {
+        setCurrentUser(user)
+        
+      })
+      return currentUser
     }
-  
+    */
+    function getCurrentUser()
+    {
+      let user = auth.currentUser
+      return user
+    }
+
     useEffect(() => {
       const unsubscribe = auth.onAuthStateChanged(user => {
-        setCurrentUser(user)
         setLoading(false)
+        setCurrentUser(user)
+        
       })
   
       return unsubscribe

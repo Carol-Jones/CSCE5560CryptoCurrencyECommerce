@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { whileStatement } from '@babel/types';
+import { useAuth } from "../context/AuthContext"
+
 
 //Puts component in center
 const MODAL_STYLES = {
@@ -34,8 +35,14 @@ const CLOSE_STYLE = {
     color: 'white',
 }
 
+
 export default function Modal({ open, children, onClose }) {
+  const {currentUser} = useAuth();
+
   if (!open) return null
+  else if(currentUser){
+    onClose();
+  }
 
   return ReactDom.createPortal(
         <>

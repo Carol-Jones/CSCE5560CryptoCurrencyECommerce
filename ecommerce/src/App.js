@@ -6,6 +6,8 @@ import { EthProvider } from "./context/EthContext";
 import Login from "./components/login"
 
 import Main from "./components/main";
+import NavBar from "./components/navbar";
+
 function App() {
   return (
    
@@ -15,11 +17,10 @@ function App() {
        
       <EthProvider>
 
-      
+        <NavBar />
         <Routes>
           
         <Route exact path="/" element={<Main />} />
-        <Route exact path="/Login" element={<Login />} />
 
        
         </Routes>

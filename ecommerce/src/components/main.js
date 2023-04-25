@@ -31,7 +31,6 @@ function Main() {
   //get function and variables from context
   const {connectWalletHandler, accountChangedHandler, accountBalanceHandler, defaultAccount, userBalance} = useContext(EthContext)
 
-  const [loginOpen, setLoginOpen] = useState(false);
 
   //Array of the items to sell
   const items = [];
@@ -193,10 +192,7 @@ function Main() {
   };
 
  
-function handleLogin() 
-{
-  setLoginOpen(true);
-}
+
 
   return (
     <div>
@@ -208,21 +204,7 @@ function handleLogin()
         </h2>
         <div className="navButtons">
           <button onClick={connectWalletHandler}>Enable Ethereum</button>
-          <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                color="inherit"
-                onClick={() => {setLoginOpen(true)}}
-                
-              >
-                <AccountCircleIcon/>
-              </IconButton>
-          <div id="portal">
-          <Modal open={loginOpen} onClose={() => setLoginOpen(false)}><Login /></Modal>
-
-          </div>
+        
 
           <img
             className="shoppingCart"
@@ -231,7 +213,7 @@ function handleLogin()
             onClick={showShoppingCartHandler}
           ></img>
         </div>
-        <div>
+        <div id="portal">
       
         </div>
         {showCart && <ShowShoppingCart cartItems={shoppingCart} />}
