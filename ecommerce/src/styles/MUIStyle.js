@@ -24,18 +24,18 @@ export const StyledTextField = styled(TextField)({
       color: "black"
     },
     "& .MuiInput-underline:after": {
-      borderBottomColor: "white"
+      borderBottomColor: "black"
     },
     "& .MuiOutlinedInput-root": {
       "& fieldset": {
         borderColor: "white"
       },
       "&:hover fieldset": {
-        borderColor: "white",
+        borderColor: "black",
         borderWidth: 2
       },
       "&.Mui-focused fieldset": {
-        borderColor: "white"
+        borderColor: "black"
       }
     }
   });

@@ -8,11 +8,15 @@ import { useAuth } from "../context/AuthContext"
 //Puts component in center
 const MODAL_STYLES = {
   position: 'fixed',
-  top: '30%',
+  top: '40%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  backgroundColor: 'rgba(30, 30, 30, .80)',
-  padding: '75px',
+  backgroundColor: 'rgba(250, 250, 250, 1)',
+  padding: '50px',
+  borderRadius:'25px',
+  borderColor:'black',
+  border:'.5px solid',
+  background: 'linear-gradient(145deg, rgba(219,209,219,.99),rgba(219,209,219,1),rgba(255,255,255,1),rgba(255,255,255,1), rgba(255,255,255,.99))',
   zIndex: 1000,
 }
 
@@ -30,9 +34,9 @@ const OVERLAY_STYLES = {
 //Puts the X in the corner
 const CLOSE_STYLE = {
     position: 'absolute',
-    top: 0,
-    left: 0,
-    color: 'white',
+    top: 5,
+    left: 5,
+    color: 'black',
 }
 
 
@@ -47,7 +51,7 @@ export default function Modal({ open, children, onClose }) {
   return ReactDom.createPortal(
         <>
             <div style={OVERLAY_STYLES} />
-            <div style={MODAL_STYLES}>
+            <div style={MODAL_STYLES} id ="Modal">
             
             <IconButton aria-label="close" style={CLOSE_STYLE} onClick={onClose}>
               <CloseIcon />

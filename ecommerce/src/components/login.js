@@ -2,7 +2,10 @@ import React, {useRef, useState, useContext} from "react";
 import { Form } from "react-bootstrap";
 
 import { StyledTextField } from '../styles/MUIStyle';
-import { IconButton, InputAdornment, Box, Button, TextField } from '@mui/material';
+import { InputAdornment, Box, Button, TextField } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+
+import GoogleIcon from '@mui/icons-material/Google';
 
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -19,6 +22,7 @@ export default function Login() {
     const passwordRef = useRef();
 
     const { login } = useAuth(); 
+    const { loginWithGooglePopup } = useAuth();
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -29,14 +33,12 @@ export default function Login() {
         try {
             setError("");
             setLoading(true);
-            console.log(emailRef.current.value)
-            console.log(passwordRef.current.value)
             await login(emailRef.current.value, passwordRef.current.value);
             
         navigate('/')
         await connectWalletHandler();  
         } catch {
-            setError("Failed to create an account");
+            setError("Failed to login");
             
         }
         setLoading(false);
@@ -48,18 +50,33 @@ export default function Login() {
         setShowPassword(!showPassword);
     }
 
+    async function handleGoogle(e) {
+        try {
+            setError("");
+            setLoading(true);
+            await loginWithGooglePopup();
+        
+        await connectWalletHandler();  
+        } catch {
+            setError("Failed to login")
+        }
+        setLoading(false);
+    }
+
     return (
         <Box textAlign='center' sx={{
             display: 'flex',
             flexDirection: 'column',
             alignItems:"center",}}>
-
+            <div className="login-header">
+                <h3>Login</h3>
+            </div>
             <Form onSubmit ={handleSubmit}>
-                <Form.Group className="mb-3" id="email">
-                    <StyledTextField id="outlined-basic" label ="Email" varient="filled" type="email" inputRef={emailRef} required/>
-                </Form.Group>
-                <Form.Group className="mb-3" id="password">      
-                    <StyledTextField  id="outlined-basic" label="Password" variant="filled" required
+            <Form.Group id="email">
+                <StyledTextField label="Email" variant="filled" type="email" inputRef={emailRef} required></StyledTextField>
+            </Form.Group>
+                <Form.Group id="password">      
+                    <StyledTextField label="Password" variant="filled" required
                         type={showPassword ? "text" : "password"}
                         InputProps={{
                             endAdornment: (
@@ -83,6 +100,10 @@ export default function Login() {
                     Sign In
                 </Button>
             </Form>
+            <div>
+                <p>Or Sign in With</p>
+                <Button onClick={handleGoogle} sx={{width: 400 }} variant="contained" id ="googleSignIn" type ="submit" startIcon={<GoogleIcon />} >Google</Button>
+            </div>
         </Box>
     )
 }

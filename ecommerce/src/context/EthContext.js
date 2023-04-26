@@ -71,12 +71,15 @@ export const EthProvider = ({ children }) => {
       });
   };
 
+ 
+
   return (
     <EthContext.Provider
     value ={{
         defaultAccount,
         userBalance,
-        connectWalletHandler
+        connectWalletHandler,
+        
     }}
     >
         {children}

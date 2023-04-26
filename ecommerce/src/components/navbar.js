@@ -4,7 +4,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import { Link, useNavigate } from 'react-router-dom'
-
+import "../styles/style.css";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
@@ -63,7 +63,9 @@ function NavBar(){
         <AppBar position ='static' style={{backgroundColor:'#211D1D'}} >
 
             <Toolbar>
-                
+                <div className="navSpacer">
+
+                </div>
                 {currentUser && (
                 <div>
                     <IconButton
@@ -81,11 +83,13 @@ function NavBar(){
                     
                     <Menu
                     sx={{ mt: '45px' }}
+                    style={{width:'300px'}}
+
                         id="menu-appbar"
                         anchorEl={anchorEl}
                         anchorOrigin={{
                         vertical: 'top',
-                        horizontal: 'right',
+                        horizontal: 'right',                        
                         }}
                         keepMounted
                         transformOrigin={{
@@ -100,13 +104,6 @@ function NavBar(){
                             >
                             Account      
                             </MenuItem>
-
-
-                            <MenuItem onClick={() =>{enableEth(); handleClose();}} 
-                            >
-                            Enable Ethereum   
-                            </MenuItem>
-
                             
 
                             <MenuItem onClick={() => {handleLogOut(); handleClose();}} 

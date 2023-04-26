@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from "react"
-import { auth } from "../firebase"
+import { auth } from "../firebase";
+import { provider } from "../firebase";
 import {
     getAuth,
     createUserWithEmailAndPassword,
@@ -7,7 +8,10 @@ import {
     signOut,
     updateEmail,
     updatePassword,
-    onAuthStateChanged
+    onAuthStateChanged,
+    GoogleAuthProvider,
+    signInWithPopup,
+    signInWithRedirect
 } from "firebase/auth";
 import { ethers } from 'ethers';
 import { getDatabase, set, ref, update } from "firebase/database";
@@ -38,6 +42,14 @@ export function AuthProvider({ children }) {
       return signInWithEmailAndPassword(auth,email, password)
       
     }
+
+    function loginWithGooglePopup() {
+      return signInWithPopup(auth,provider);
+    }
+
+    function loginInWithGoogleRedirect() {
+      return signInWithRedirect(auth,provider);
+    }
   
     function logout() {
       return signOut(auth)
@@ -54,16 +66,7 @@ export function AuthProvider({ children }) {
     function updateUserPassword(password) {
       return updatePassword(currentUser,password)
     }
-/*
-    function getCurrentUser()
-    {
-      const currentUser = auth.onAuthStateChanged(user => {
-        setCurrentUser(user)
-        
-      })
-      return currentUser
-    }
-    */
+
     function getCurrentUser()
     {
       let user = auth.currentUser
@@ -90,7 +93,9 @@ export function AuthProvider({ children }) {
       updatePassword,
       getCurrentUser,
       updateUserEmail,
-      updateUserPassword
+      updateUserPassword,
+      loginWithGooglePopup,
+      loginInWithGoogleRedirect
     }
     
   

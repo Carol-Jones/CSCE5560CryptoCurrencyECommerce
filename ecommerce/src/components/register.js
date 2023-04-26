@@ -2,8 +2,11 @@ import React, { useRef, useState, useContext } from "react"
 import { Form } from "react-bootstrap"
 
 import { Link, useNavigate, useHistory } from 'react-router-dom';
-import { IconButton, InputAdornment, Box, Button, TextField } from '@mui/material';
+import { InputAdornment, Box, Button, TextField } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import { StyledTextField } from '../styles/MUIStyle';
+import GoogleIcon from '@mui/icons-material/Google';
+
 
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -27,6 +30,7 @@ export default function Signup() {
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
   const {getCurrentUser} = useAuth()
+  const { loginWithGooglePopup } = useAuth();
 
   
   async function handleSubmit(e) {
@@ -74,12 +78,43 @@ export default function Signup() {
     setShowPassword(!showPassword)
   }
 
+  async function handleGoogle(e) {
+    try {
+        setError("");
+        setLoading(true);
+        await loginWithGooglePopup();
+      const user = getCurrentUser();
+
+      set(ref(database, 'users/' + user.uid), {
+        email: user.email,
+
+       })
+        .then(() => {
+            // Data saved successfully!
+            alert('user created successfully');
+
+        })
+        .catch((error) => {
+            // The write failed...
+            alert(error);
+        });
+
+    await connectWalletHandler();  
+    } catch {
+        setError("Failed to login")
+    }
+    setLoading(false);
+}
+
   return (
     <Box textAlign='center' sx={{
         display: 'flex',
         flexDirection: 'column',
         alignItems:"center",}}>
         
+        <div className="register-header">
+                <h3>Sign Up</h3>
+            </div>
         
         <Form onSubmit={handleSubmit}>
       <Form.Group id="email">
@@ -138,6 +173,10 @@ export default function Signup() {
       
     </Form>
 
+    <div>
+      <p>Or Sign in With</p>
+      <Button onClick={handleGoogle} sx={{width: 400 }} variant="contained" id ="googleSignIn" type ="submit" startIcon={<GoogleIcon />} >Google</Button>
+    </div>
    
    </Box>
   )

@@ -203,8 +203,6 @@ function Main() {
           <em>Art for the modern age</em>
         </h2>
         <div className="navButtons">
-          <button onClick={connectWalletHandler}>Enable Ethereum</button>
-        
 
           <img
             className="shoppingCart"

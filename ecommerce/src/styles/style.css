@@ -123,6 +123,10 @@ nav {
   margin: 0 15px;
 }
 
+.navSpacer{
+  display:flex;
+  margin-left: 90%;
+}
 .shoppingCartPopup {
   position: absolute;
   top: 0px;
