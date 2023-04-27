@@ -12,16 +12,16 @@ import NavBar from "./components/navbar";
 function App() {
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <EthProvider>
-          <CartProvider>
+      <CartProvider>
+        <AuthProvider>
+          <EthProvider>
             <NavBar />
             <Routes>
               <Route exact path="/" element={<Main />} />
             </Routes>
-          </CartProvider>
-        </EthProvider>
-      </AuthProvider>
+          </EthProvider>
+        </AuthProvider>
+      </CartProvider>
     </BrowserRouter>
   );
 }
