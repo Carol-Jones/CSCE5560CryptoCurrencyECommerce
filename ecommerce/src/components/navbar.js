@@ -71,6 +71,7 @@ function NavBar() {
         {currentUser && (
           <div>
             <IconButton
+            sx={{paddingRight:5}}
               size="large"
               edge="end"
               aria-label="account of current user"
@@ -78,6 +79,7 @@ function NavBar() {
               aria-haspopup="true"
               onClick={handleMenu}
               color="inherit"
+              
             >
               <AccountCircleIcon />
             </IconButton>
