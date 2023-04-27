@@ -32,6 +32,7 @@ function NavBar() {
     accountBalanceHandler,
     defaultAccount,
     userBalance,
+    disconnectWallet
   } = useContext(EthContext);
 
   const { showShoppingCartHandler } = useContext(CartContext);
@@ -62,8 +63,21 @@ function NavBar() {
 
   const handleLogOut = () => {
     logout();
+    
   };
 
+  const handleMetaMaskLogOut = async () => {
+    
+    try{
+
+      await logout();
+      disconnectWallet();
+    }
+    catch{
+
+    }
+    
+  }
   return (
     <AppBar position="static" style={{ backgroundColor: "#211D1D" }}>
       <Toolbar>
@@ -124,6 +138,7 @@ function NavBar() {
               <MenuItem
                 onClick={() => {
                   handleLogOut();
+                  handleMetaMaskLogOut();
                   handleClose();
                 }}
               >

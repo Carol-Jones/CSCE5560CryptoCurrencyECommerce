@@ -17,7 +17,6 @@ import { ethers } from "ethers";
 import { getDatabase, set, ref, update, get, onValue } from "firebase/database";
 import { database } from "../firebase";
 
-import { EthContext } from "../context/EthContext";
 import { CartContext } from "./CartContext";
 
 const AuthContext = React.createContext();
@@ -27,6 +26,7 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
+
   const { shoppingCart, setShoppingCart } = useContext(CartContext);
 
   const [currentUser, setCurrentUser] = useState();
@@ -50,7 +50,7 @@ export function AuthProvider({ children }) {
 
   function logout() {
     saveCart();
-    console.log("bye");
+    //console.log("bye");
     return signOut(auth);
   }
 
@@ -79,8 +79,11 @@ export function AuthProvider({ children }) {
       console.log(cartRef);
       onValue(cartRef, (snapshot) => {
         const data = snapshot.val();
-        // console.log(new Map(Object.entries(data)));
-        setShoppingCart(new Map(Object.entries(data)));
+        //console.log(new Map(Object.entries(data)));
+        if(data)
+        {
+          setShoppingCart(new Map(Object.entries(data)));
+        }
       });
     }
   }
@@ -89,11 +92,12 @@ export function AuthProvider({ children }) {
     const user = getCurrentUser();
     if (user) {
       const cartRef = ref(database, `users/${user.uid}/cart`);
-      console.log(cartRef);
+      //console.log(cartRef);
       //add the shopping cart to the user
       set(cartRef, Object.fromEntries(shoppingCart));
     }
   }
+
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -103,6 +107,8 @@ export function AuthProvider({ children }) {
 
     return unsubscribe;
   }, []);
+
+
 
   const value = {
     currentUser,

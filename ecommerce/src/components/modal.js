@@ -1,4 +1,4 @@
-import React from 'react';
+import { React, useEffect } from 'react';
 import ReactDom from 'react-dom';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
@@ -41,12 +41,18 @@ const CLOSE_STYLE = {
 
 
 export default function Modal({ open, children, onClose }) {
-  const {currentUser} = useAuth();
+  const {getCurrentUser} = useAuth();
+
+  useEffect(() => {
+    const user = getCurrentUser();
+    if(user){
+      onClose();
+    }
+  })
 
   if (!open) return null
-  else if(currentUser){
-    onClose();
-  }
+  
+  
 
   return ReactDom.createPortal(
         <>

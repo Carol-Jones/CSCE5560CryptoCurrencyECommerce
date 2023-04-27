@@ -1,12 +1,15 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { ethers } from 'ethers';
-import { getDatabase, set, ref, update } from "firebase/database";
+import { getDatabase, set, ref, update, onValue, orderByChild, } from "firebase/database";
 import { database } from "../firebase";
 
+import { useAuth } from "./AuthContext";
 
 export const EthContext = React.createContext();
 
 export const EthProvider = ({ children }) => {
+
+  const { getCurrentUser } = useAuth();
     //Error Message
   const [errorMessage, setErrorMessage] = useState(null);
 
@@ -41,24 +44,35 @@ export const EthProvider = ({ children }) => {
   //Set Account
   const accountChangedHandler = (newAccount) => {
     setDefaultAccount(newAccount.toString());
+    const user = getCurrentUser();
 
+    //check if eth address already exists 
+    const ethRef = ref(database, `users/${user.uid}`);
+    onValue(ethRef, (snapshot) => {
+      const data = snapshot.val();
+      const ethAddressRef = data.ethAddress.toString();
+      if(ethAddressRef !=newAccount)
+      {
+        try {
+          update(ref(database, "users/" + user.uid), {
+            ethAddress: newAccount.toString(),
+          })
+            .then(() => {
+              // Data saved successfully!
+              alert("Etherium Address Saved Successfully");
+            })
+            .catch((error) => {
+              // The write failed...
+              alert(error);
+            });
+        } catch {}
+        accountBalanceHandler(newAccount);
+      }
+    });
     //add user etherium address to database users table
-    try {
-      update(ref(database, "users/"), {
-        ethAddress: newAccount.toString(),
-      })
-        .then(() => {
-          // Data saved successfully!
-          alert("Etherium Address Saved Successfully");
-        })
-        .catch((error) => {
-          // The write failed...
-          alert(error);
-        });
-    } catch {}
-    accountBalanceHandler(newAccount);
 
-    //add to database as user
+
+    
   };
 
   //Get account Balance
@@ -71,7 +85,28 @@ export const EthProvider = ({ children }) => {
       });
   };
 
- 
+  //reload window to disconnect MetaMask if user is logged out 
+  const disconnectWallet = async () =>
+  {
+    try {
+      const user = await getCurrentUser();
+      if(!user && defaultAccount){
+        window.location.reload();
+      }
+    }catch{
+
+    }
+
+  }
+
+  //reconnect MetaMask if page refreshes and user is still logged in
+  useEffect(() => {
+    const user = getCurrentUser();
+    if(user && !defaultAccount){
+      connectWalletHandler();
+    }
+  })
+  
 
   return (
     <EthContext.Provider
@@ -79,6 +114,7 @@ export const EthProvider = ({ children }) => {
         defaultAccount,
         userBalance,
         connectWalletHandler,
+        disconnectWallet,
         
     }}
     >
