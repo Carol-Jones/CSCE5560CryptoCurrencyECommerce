@@ -123,13 +123,13 @@ nav {
   margin: 0 15px;
 }
 
-.navSpacer{
-  display:flex;
+.navSpacer {
+  display: flex;
   margin-left: 90%;
 }
 .shoppingCartPopup {
   position: absolute;
-  top: 0px;
+  top: 64px;
   right: 0px;
   width: 25%;
   background-color: white;
@@ -147,4 +147,3 @@ nav {
 .shoppingCartPopupItem img {
   width: 100px;
 }
-
