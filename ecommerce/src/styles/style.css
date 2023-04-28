@@ -130,18 +130,19 @@ nav {
   display: flex;
   margin-left: 80%;
 }
+
 .shoppingCartPopup {
   position: absolute;
   top: 64px;
   right: 0px;
-  width: 25%;
+  width: 30%;
   background-color: white;
-  border: 5px solid gray;
+  border: 2px solid gray;
   text-align: center;
-  transform:(translateX(100%));
-  transition: .3s ease-out;
+
   z-index: 99;
 }
+
 
 .shoppingCartPopupItem {
   display: flex;

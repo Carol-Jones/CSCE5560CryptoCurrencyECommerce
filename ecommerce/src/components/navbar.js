@@ -42,6 +42,7 @@ function NavBar() {
   const [registerOpen, setRegisterOpen] = useState(false);
 
   const navigateToAccount = () => {
+    navigate('/account')
     setAnchorEl(null);
   };
 

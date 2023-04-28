@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import items from "../items";
-
+import "../styles/style.css"
 export const CartContext = React.createContext("");
 
 export const CartProvider = ({ children }) => {
