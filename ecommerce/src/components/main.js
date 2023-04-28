@@ -8,6 +8,16 @@ import IconButton from "@mui/material/IconButton";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Link, useNavigate } from "react-router-dom";
 
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
+import CardActions from "@mui/material/CardActions";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+
 import Item from "../Item";
 import Login from "./login";
 import Modal from "./modal";
@@ -45,6 +55,7 @@ function Main() {
 
   return (
     <div>
+      {/* <Box sx={{ width: 300, height: 300, backgroundColor: "violet" }}></Box> */}
       <nav>
         <h1>Welcome to TempCity</h1>
         <h2>
@@ -70,40 +81,65 @@ function Main() {
       <main>
         <div className="containermain">
           {items.map((item, number) => (
-            <div className="containerproduct" key={number}>
-              <img className="product" src={item.image} alt=""></img>
-              <p>
-                <span className="productID">{item.name}</span>
-              </p>
-              <p>
-                <span className="productPrice">{item.price} ETH</span>
-              </p>
+            <Card
+              raised={true}
+              style={{
+                textAlign: "center",
+                padding: 25,
+                margin: 25,
+                width: 225,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <CardMedia
+                component="img"
+                height="200"
+                image={item.image}
+                alt=""
+              />
+              <Typography variant="h5" gutterBottom>
+                {item.name}
+              </Typography>
+              <Typography
+                variant="p"
+                color="red"
+                fontWeight="bold"
+                gutterBottom
+              >
+                {item.price} ETH
+              </Typography>
               <form
                 className="addtoCart"
                 onSubmit={(event) => {
                   event.preventDefault();
-                  addToCart(item, event.target.quantity.value);
+                  addToCart(item, event.target.elements[0].value);
                 }}
               >
-                <div>
-                  <label htmlFor="quantity">Quantity: </label>
-                  <input
+                <CardActions>
+                  <TextField
+                    if="quantity"
                     type="number"
-                    id="quantity"
-                    name="quantity"
-                    min="1"
-                    max="5"
-                    defaultValue={1}
-                  ></input>
-                </div>
-                <input
-                  type="submit"
-                  id="add"
-                  name="add"
-                  value="Add To Cart"
-                ></input>
+                    label="Quantity"
+                    inputProps={{
+                      min: 1,
+                      max: 5,
+                      defaultValue: 1,
+                    }}
+                  />
+                </CardActions>
+                <CardActions>
+                  <Button
+                    variant="contained"
+                    startIcon={<AddShoppingCartIcon />}
+                    type="submit"
+                  >
+                    Add To Cart
+                  </Button>
+                </CardActions>
               </form>
-            </div>
+            </Card>
           ))}
         </div>
       </main>
