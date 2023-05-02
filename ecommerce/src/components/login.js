@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { EthContext } from "../context/EthContext";
 import { database } from "../firebase";
 
-export default function Login() {
+export default function Login({handleLoginClose}) {
   const {
     connectWalletHandler,
     accountChangedHandler,
@@ -48,6 +48,8 @@ export default function Login() {
       setError("Failed to login");
     }
     setLoading(false);
+    handleLoginClose();
+    
   }
 
   async function handleClickShowPassword(e) {
@@ -66,6 +68,8 @@ export default function Login() {
       setError("Failed to login");
     }
     setLoading(false);
+    handleLoginClose();
+
   }
 
   return (

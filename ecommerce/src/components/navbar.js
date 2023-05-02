@@ -77,8 +77,19 @@ function NavBar() {
     catch{
 
     }
-    
+
   }
+  const handleLoginClose = () =>
+  {
+    setLoginOpen(false);
+  }
+      
+
+  const handleRegisterClose = () =>
+  {
+    setRegisterOpen(false);
+  }
+
   return (
     <AppBar position="static" style={{ backgroundColor: "#211D1D" }}>
       <Toolbar>
@@ -202,10 +213,10 @@ function NavBar() {
       </Toolbar>
 
       <Modal open={loginOpen} onClose={() => setLoginOpen(false)}>
-        <Login />
+        <Login handleLoginClose={handleLoginClose} />
       </Modal>
       <Modal open={registerOpen} onClose={() => setRegisterOpen(false)}>
-        <Register />
+        <Register handleRegisterClose={handleRegisterClose}/>
       </Modal>
     </AppBar>
   );

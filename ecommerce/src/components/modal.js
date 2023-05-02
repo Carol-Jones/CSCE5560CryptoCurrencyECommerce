@@ -1,14 +1,14 @@
-import { React, useEffect } from 'react';
+import { React, useEffect, onChange, useState } from 'react';
 import ReactDom from 'react-dom';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { useAuth } from "../context/AuthContext"
-
+import { onAuthStateChanged } from 'firebase/auth';
 
 //Puts component in center
 const MODAL_STYLES = {
   position: 'fixed',
-  top: '40%',
+  top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
   backgroundColor: 'rgba(250, 250, 250, 1)',
@@ -17,7 +17,7 @@ const MODAL_STYLES = {
   borderColor:'black',
   border:'.5px solid',
   background: 'linear-gradient(145deg, rgba(219,209,219,.99),rgba(219,209,219,1),rgba(255,255,255,1),rgba(255,255,255,1), rgba(255,255,255,.99))',
-  zIndex: 1000,
+  zIndex: 1400,
 }
 
 //Makes everything that can't be clicked grey
@@ -43,12 +43,19 @@ const CLOSE_STYLE = {
 export default function Modal({ open, children, onClose }) {
   const {getCurrentUser} = useAuth();
 
+  const [isLogged,setIsLogged] = useState();
+
+
+
+/*
   useEffect(() => {
     const user = getCurrentUser();
+
     if(user){
       onClose();
     }
   })
+  */
 
   if (!open) return null
   

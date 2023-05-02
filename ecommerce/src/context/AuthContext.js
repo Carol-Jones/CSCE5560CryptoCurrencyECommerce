@@ -32,6 +32,8 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
 
+  const [address, setAddress] = useState();
+
   function signup(email, password) {
     return createUserWithEmailAndPassword(auth, email, password);
   }
@@ -99,6 +101,8 @@ export function AuthProvider({ children }) {
   }
 
 
+
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setLoading(false);
@@ -108,7 +112,8 @@ export function AuthProvider({ children }) {
     return unsubscribe;
   }, []);
 
-
+  //monitor auth state change
+ 
 
   const value = {
     currentUser,
@@ -125,6 +130,8 @@ export function AuthProvider({ children }) {
     loginInWithGoogleRedirect,
     getCart,
     saveCart,
+    
+    
   };
 
   return (

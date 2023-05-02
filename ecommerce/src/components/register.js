@@ -17,7 +17,7 @@ import { useAuth } from "../context/AuthContext"
 import { EthContext } from "../context/EthContext";
 
 
-export default function Signup() {
+export default function Signup({handleRegisterClose}) {
   const {connectWalletHandler, accountChangedHandler, accountBalanceHandler, defaultAccount, userBalance} = useContext(EthContext)
 
 
@@ -69,7 +69,7 @@ export default function Signup() {
     }
 
     setLoading(false)
-    
+    handleRegisterClose();
   }
  
   
@@ -104,6 +104,8 @@ export default function Signup() {
         setError("Failed to login")
     }
     setLoading(false);
+    handleRegisterClose();
+
 }
 
   return (

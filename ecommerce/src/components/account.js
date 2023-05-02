@@ -21,217 +21,108 @@ import AppBar from '@mui/material/AppBar';
 import Typography from '@mui/material/Typography';
 
 import AccountInfo from "./accountInfo";
-
+import WalletInfo from "./walletInfo"
 const drawerWidth = 150;
 
 export default function Account(){
+
+    const {
+        shoppingCart,
+        showCart,
+        totalCost,
+        addToCart,
+        updateTotal,
+        showShoppingCartHandler,
+        ShowShoppingCart,
+        checkOutHandler,
+      } = useContext(CartContext);
+
     const [info, setInfo] = useState(false);
     const [wallet, setWallet] = useState(false);
     const [orders, setOrders] = useState(false);
+
 
 
     return(
        
         <div>
 
-      
-        <Box sx={{ display: 'flex'}}>
-        <AppBar
-          position='relative'
-          sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
-        >
-          <Toolbar>
-            <Typography variant="h6" noWrap component="div">
-              Permanent drawer
-            </Typography>
-          </Toolbar>
-        </AppBar>
-    
-        <Drawer
-          sx={{
-            width: drawerWidth,
-            flexShrink: 0,
-            '& .MuiDrawer-paper': {
-              width: drawerWidth,
-              boxSizing: 'border-box',
-              marginTop: 8,
-              background: 'inherit',
-            },
-          }}
-          variant="permanent"
-          anchor="left"
-        >
-        
-          <List sx={{marginTop:5}}>
+    {showCart && <ShowShoppingCart cartItems={shoppingCart} />}
 
+        <Box sx={{display:'flex'}}> 
 
-
-          <ListItem >
-            <ListItemButton onClick={()=> {
-                setInfo(true); 
-                setWallet(false);
-                setOrders(false);
-            }}>
-                <h3>Info</h3>
-            </ListItemButton> 
-          </ListItem>
-
-          <ListItem >
-            <ListItemButton onClick={()=> {
-                setWallet(true);
-                setInfo(false);
-                setOrders(false);
-
-            }}>
-                <h3>Wallet</h3>
-            </ListItemButton> 
-          </ListItem>
-
-          <ListItem >
-            <ListItemButton onClick={()=> {
-                setOrders(true);
-                setInfo(false);
-                setWallet(false);
-                
-            }}>
-                <h3>Orders</h3>
-            </ListItemButton> 
-          </ListItem>
-
-          </List>
-
-        </Drawer>
-
-
-        </Box>
-            <Box 
-            component="main"
-            sx={{display:'flex', marginLeft: '150px',bgcolor: 'background.default', p: 3 }}
+            <Drawer
+            sx={{
+                width: drawerWidth,
+                flexShrink: 0,
+                '& .MuiDrawer-paper': {
+                width: drawerWidth,
+                boxSizing: 'border-box',
+                marginTop: 8,
+                background: 'inherit',
+                },
+            }}
+            variant="permanent"
+            anchor="left"
             >
             
-            {info && (
-                <div>
-                    <h3>Info</h3>
-         
-                </div>
-            )}
+                <List sx={{marginTop:5}}>
 
-            {wallet && (
-                <div>
-                    <h3>Wallet</h3>
+                    <ListItem >
+                        <ListItemButton onClick={()=> {
+                            setInfo(true); 
+                            setWallet(false);
+                            setOrders(false);
+                        }}>
+                            <h3>Info</h3>
+                        </ListItemButton> 
+                    </ListItem>
 
-                </div>
-            )}
+                    <ListItem >
+                        <ListItemButton onClick={()=> {
+                            setWallet(true);
+                            setInfo(false);
+                            setOrders(false);
 
-            {orders && (
-                <div>
-                    <h3>Orders</h3>
+                        }}>
+                            <h3>Wallet</h3>
+                        </ListItemButton> 
+                    </ListItem>
 
-                </div>
-            )}
 
-            <Box>
+                </List>
 
-        </Box>
-           
+            </Drawer>
+
+
+            </Box>
+                <Box 
+                component="main"
+                sx={{ marginLeft: '150px',background: 'inherit', p: 3, }}
+                >
+                    {info && (
+                        <Box 
+                        sx={{display:'flex', flexDirection: "column",
+                        alignItems: "center", }}>
+                            <h3></h3>
+                        <AccountInfo />
+                
+                        </Box>
+                    )}
+
+                    {wallet && (
+                        <div>
+                            <h3></h3>
+                        <WalletInfo />
+                        </div>
+                    )}
+                <Box>
+            </Box>
+
         </Box>
 
 
         </div>
-
-        
     )
 }
 
-/*
-export default function PermanentDrawerLeft() {
-    return (
-      <Box sx={{ display: 'flex' }}>
-        
-        <AppBar
-          position="fixed"
-          sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
-        >
-          <Toolbar>
-            <Typography variant="h6" noWrap component="div">
-              Permanent drawer
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <Drawer
-          sx={{
-            width: drawerWidth,
-            flexShrink: 0,
-            '& .MuiDrawer-paper': {
-              width: drawerWidth,
-              boxSizing: 'border-box',
-            },
-          }}
-          variant="permanent"
-          anchor="left"
-        >
-          <Toolbar />
-          <Divider />
-          <List>
-            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-              <ListItem key={text} disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                  </ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-          <Divider />
-          <List>
-            {['All mail', 'Trash', 'Spam'].map((text, index) => (
-              <ListItem key={text} disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                  </ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-        </Drawer>
-        <Box
-          component="main"
-          sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
-        >
-          <Toolbar />
-          <Typography paragraph>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-            tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
-            enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-            imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus.
-            Convallis convallis tellus id interdum velit laoreet id donec ultrices.
-            Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-            adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra
-            nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum
-            leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis
-            feugiat vivamus at augue. At augue eget arcu dictum varius duis at
-            consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-            sapien faucibus et molestie ac.
-          </Typography>
-          <Typography paragraph>
-            Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper
-            eget nulla facilisi etiam dignissim diam. Pulvinar elementum integer enim
-            neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra
-            tellus. Purus sit amet volutpat consequat mauris. Elementum eu facilisis
-            sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi
-            tincidunt ornare massa eget egestas purus viverra accumsan in. In hendrerit
-            gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-            et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis
-            tristique sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-            eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-            posuere sollicitudin aliquam ultrices sagittis orci a.
-          </Typography>
-        </Box>
-      </Box>
-    );
-  }
-  */
