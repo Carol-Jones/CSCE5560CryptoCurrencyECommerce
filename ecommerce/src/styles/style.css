@@ -1,0 +1,149 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat");
+
+* {
+  font-family: "Montserrat", sans-serif;
+}
+
+body {
+  background-color: #dbd1db;
+}
+
+h1 {
+  text-align: center;
+  font-size: 4rem;
+  margin-bottom: 0px;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.navi {
+  display: flex;
+  border: green 5px solid;
+  background-color: black;
+  margin-bottom: 10px;
+  justify-content: space-around;
+  min-width: 750px;
+}
+
+.item {
+  padding-right: 50px;
+  padding-left: 50px;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.containermain {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-around;
+  min-width: 750px;
+}
+
+.containerproduct {
+  border: black 2px solid;
+  margin: 5px;
+}
+
+.item {
+  text-decoration: none;
+  color: white;
+}
+
+.product {
+  width: 250px;
+  height: 250px;
+  padding: 0px;
+}
+
+.productID {
+  background-color: black;
+  display: flex;
+  color: white;
+  border: green 5px solid;
+  justify-content: center;
+}
+
+.productPrice {
+  display: flex;
+  color: red;
+  font-weight: bold;
+  font-size: 1.5rem;
+  justify-content: center;
+}
+
+.addtoCart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.addtoCart > * {
+  margin: 16px;
+}
+
+.addtoCart input[type="submit"] {
+  background-image: linear-gradient(darkblue, blue);
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+  border: none;
+  padding: 7px;
+  font-size: 1.15rem;
+  cursor: pointer;
+}
+
+.addtoCart input[type="submit"]:hover {
+  background-image: linear-gradient(blue, darkblue);
+}
+
+.addtoCart input[type="submit"]:active {
+  background-image: linear-gradient(darkblue, blue);
+}
+
+.navButtons {
+  display: flex;
+  justify-content: center;
+}
+.navButtons > img {
+  width: 50px;
+}
+.navButtons > * {
+  margin: 0 15px;
+}
+
+.navSpacer {
+  display: flex;
+  margin-left: 90%;
+}
+.shoppingCartPopup {
+  position: absolute;
+  top: 64px;
+  right: 0px;
+  width: 25%;
+  background-color: white;
+  border: 5px solid gray;
+  text-align: center;
+}
+
+.shoppingCartPopupItem {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  border-bottom: 1px solid black;
+}
+
+.shoppingCartPopupItem img {
+  width: 100px;
+}
